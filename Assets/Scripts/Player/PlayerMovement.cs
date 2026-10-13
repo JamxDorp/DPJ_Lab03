@@ -3,9 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Player player;
     private UserActions actions;
     private Rigidbody2D rigidBody;
-    private Animator animator;
+    private PlayerAnimation playerAnimation;
 
     private Vector2 moveDirection;
 
@@ -14,9 +15,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        player = GetComponent<Player>();
         actions = new UserActions();
         rigidBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        playerAnimation = GetComponent<PlayerAnimation>();
     }
 
     private void Update()
@@ -32,21 +34,13 @@ public class PlayerMovement : MonoBehaviour
     private void ReadMovement()
     {
         moveDirection = actions.Movement.Move.ReadValue<Vector2>();;
-        animator.SetBool("Moving", false);
-
-        if (moveDirection == Vector2.zero)
-            return;
-
-        Debug.Log($"Move Direction: {moveDirection.x}, {moveDirection.y}");
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.y);
-        animator.SetBool("Moving", true);
-
+        playerAnimation.SetMoveBoolTransition(moveDirection != Vector2.zero);
+        playerAnimation.SetMoveAnimation(moveDirection);
     }
 
     private void Move()
     {
-        if (rigidBody == null) 
+        if (rigidBody == null || player.Stats.currentHealth <= 0) 
             return;
 
         rigidBody.MovePosition(rigidBody.position + moveDirection * (moveSpeed * Time.fixedDeltaTime));

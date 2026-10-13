@@ -6,9 +6,9 @@ menuName = "Player Stats")]
 public class PlayerStats : ScriptableObject
 {
     [Header("Config")]
-    [SerializeField] private int Playerlevel = 1;
+    [SerializeField] public int Playerlevel = 1;
 
     [Header("Health")]
-    [SerializeField] private int maxHealth = 100;
-    [SerializeField] private int currentHealth = 100;
+    [SerializeField] public int maxHealth = 100;
+    [SerializeField] public int currentHealth = 100;
 }
